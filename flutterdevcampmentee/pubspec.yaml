@@ -30,17 +30,17 @@ environment:
 dependencies:
   chewie: ^1.7.5
   cupertino_icons: ^1.0.6
+  firebase_core: ^2.25.4
   flutter:
     sdk: flutter
-  
   image_picker: ^1.0.7
   sliding_up_panel: ^2.0.0+1
   subtitle_wrapper_package: ^2.2.0
   video_player: ^2.8.2
 
 dev_dependencies:
-  flutter_lints: ^3.0.0
   flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
 

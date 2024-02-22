@@ -25,3 +25,9 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+flutterdevcampmentee/android/app/google-services.json
+flutterdevcampmentee/ios/firebase_app_id_file.json
+flutterdevcampmentee/ios/Runner/GoogleService-Info.plist
+flutterdevcampmentee/lib/firebase_options.dart
+flutterdevcampmentee/macos/Runner/GoogleService-Info.plist
+flutterdevcampmentee/macos/firebase_app_id_file.json
