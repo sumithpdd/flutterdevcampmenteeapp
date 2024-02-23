@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../utils/constants.dart';
+import '../widgets/certificate_viewer.dart';
 import '../widgets/continue_watching_list.dart';
 
 class ContinueWatchingScreen extends StatelessWidget {
@@ -43,8 +44,8 @@ class ContinueWatchingScreen extends StatelessWidget {
               style: kTitle2Style,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 24.0),
             child: ContinueWatchingList(),
           ),
           Padding(
@@ -53,6 +54,9 @@ class ContinueWatchingScreen extends StatelessWidget {
               "Certificates",
               style: kTitle2Style,
             ),
+          ),
+          const Expanded(
+            child: CertificateViewer(),
           ),
         ],
       ),

@@ -95,7 +95,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  void loadBadges() {}
+  void loadBadges() {
+    _firestore
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .get()
+        .then((snapshot) {
+      for (var badge in snapshot.data()!["badges"]) {
+        _storage.ref("badges/$badge").getDownloadURL().then((url) {
+          setState(() {
+            badges.add(url);
+          });
+        });
+      }
+    });
+  }
 
   Future getImage() async {
     final pickedFile =
