@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,19 @@ class _LoginScreenState extends State<LoginScreen> {
   String? email;
   String? password;
   final _auth = FirebaseAuth.instance;
-  Future<void> createNewUserData() async {}
+  final _firestore = FirebaseFirestore.instance;
+  Future<void> createNewUserData() async {
+    _firestore.collection('users').doc(_auth.currentUser?.uid).set({
+      'name': 'Mentee',
+      'uid': _auth.currentUser?.uid,
+      'bio': 'Flutter Devcamp Mentee',
+      'completed': [],
+      'recents': [],
+      'badges': [],
+      'certificates': [],
+      'profilePic': ''
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

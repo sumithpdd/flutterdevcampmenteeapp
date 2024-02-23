@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Course {
   Course({
-    required this.id,
+    this.id,
     required this.courseTitle,
     required this.courseSubtitle,
     required this.background,
@@ -10,7 +10,7 @@ class Course {
     this.logo,
     required this.videoUrl,
   });
-  String id;
+  String? id;
   String courseTitle;
   String courseSubtitle;
   LinearGradient background;

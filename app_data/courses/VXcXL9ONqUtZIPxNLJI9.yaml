@@ -1,0 +1,8 @@
+color:
+    - '0xFF00AEFF'
+    - '0xFF0076FF'
+logo: flutter-logo.png
+videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+courseTitle: 'Build an app with Flutter'
+courseSubtitle: '22 sessions'
+illustration: illustration-05.png

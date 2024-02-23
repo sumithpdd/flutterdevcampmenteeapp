@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../models/sidebar_item.dart';
 import '../utils/constants.dart';
@@ -6,8 +8,11 @@ import '../widgets/sidebar_row.dart';
 
 class SidebarScreen extends StatelessWidget {
   const SidebarScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
     return Container(
       decoration: const BoxDecoration(
         color: kSidebarBackgroundColor,
@@ -86,9 +91,33 @@ class SidebarScreen extends StatelessWidget {
               const SizedBox(
                 width: 12.0,
               ),
-              Text(
-                "Log out",
-                style: kSecondaryCalloutLabelStyle,
+              GestureDetector(
+                onTap: () {
+                  Future.wait([
+                    auth.signOut(),
+                  ]);
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Message"),
+                        content: const Text("Logged out successfully!"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("Ok!"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text(
+                  "Log out",
+                  style: kSecondaryCalloutLabelStyle,
+                ),
               ),
             ],
           )

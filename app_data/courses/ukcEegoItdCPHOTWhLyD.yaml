@@ -1,0 +1,8 @@
+courseSubtitle: '10 sections'
+illustration: illustration-02.png
+color:
+    - '0xFFFD504F'
+    - '0xFFFF8181'
+videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+courseTitle: 'Flutter Animation'
+logo: flutter-logo.png

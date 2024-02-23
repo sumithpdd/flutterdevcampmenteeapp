@@ -31,3 +31,5 @@ flutterdevcampmentee/ios/Runner/GoogleService-Info.plist
 flutterdevcampmentee/lib/firebase_options.dart
 flutterdevcampmentee/macos/Runner/GoogleService-Info.plist
 flutterdevcampmentee/macos/firebase_app_id_file.json
+app_data/credentials.json
+app_data/node_modules/
