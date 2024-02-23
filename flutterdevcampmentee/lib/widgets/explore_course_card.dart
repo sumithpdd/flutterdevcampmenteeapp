@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import '../models/course.dart';
@@ -11,6 +12,7 @@ class ExploreCourseCard extends StatefulWidget {
 }
 
 class _ExploreCourseCardState extends State<ExploreCourseCard> {
+  final _storage = FirebaseStorage.instance;
   String? illustrationURL;
   @override
   void initState() {
@@ -19,7 +21,14 @@ class _ExploreCourseCardState extends State<ExploreCourseCard> {
   }
 
   void getIllustration() {
-    illustrationURL = 'assets/illustrations/${widget.course.illustration}';
+    _storage
+        .ref("illustrations/${widget.course.illustration}")
+        .getDownloadURL()
+        .then((url) {
+      setState(() {
+        illustrationURL = url;
+      });
+    });
   }
 
   @override
@@ -60,7 +69,7 @@ class _ExploreCourseCardState extends State<ExploreCourseCard> {
                   children: [
                     (illustrationURL == null)
                         ? Container()
-                        : Image.asset(
+                        : Image.network(
                             illustrationURL!,
                             fit: BoxFit.cover,
                             height: 100.0,

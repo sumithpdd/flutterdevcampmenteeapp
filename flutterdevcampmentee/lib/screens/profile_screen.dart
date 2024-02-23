@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,28 +25,101 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // 'badge-04.png',
   ];
 
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+  final _storage = FirebaseStorage.instance;
+
   var name = "Loading...";
   var bio = "Loading...";
-  final String? photoURL =
-      'https://sessionize.com/image/0ff2-400o400o2-QVfRi6pPoTybevVEjiDUML.jpg';
+  var photoURL = FirebaseAuth.instance.currentUser!.photoURL;
 
   @override
   void initState() {
     super.initState();
+    _auth.currentUser!.reload();
     loadUserData();
 
     loadBadges();
   }
 
-  void loadUserData() {}
+  void loadUserData() {
+    _firestore
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .get()
+        .then((snapshot) {
+      setState(() {
+        name = snapshot.data()!["name"];
+        bio = snapshot.data()!["bio"];
+      });
+    });
+  }
 
-  void updateUserData() {}
+  void updateUserData() {
+    _firestore.collection("users").doc(_auth.currentUser!.uid).update({
+      'name': name,
+      'bio': bio,
+    }).then((value) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Success!"),
+              content: const Text("The profile data has been updated!"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("OK!"))
+              ],
+            );
+          });
+    }).catchError((err) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Uh-Oh!"),
+              content: Text("$err"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Try Again!"),
+                )
+              ],
+            );
+          });
+    });
+  }
 
   void loadBadges() {}
 
   Future getImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      File _image = File(pickedFile.path);
+
+      _storage
+          .ref("profile_pictures/${_auth.currentUser!.uid}.jpg")
+          .putFile(_image)
+          .then((snapshot) {
+        snapshot.ref.getDownloadURL().then((url) {
+          _firestore
+              .collection("users")
+              .doc(_auth.currentUser!.uid)
+              .update({'profilePic': url}).then((snapshot) {
+            _auth.currentUser!.updatePhotoURL(url);
+          });
+        });
+      });
+    } else {
+      print("A file was not selected");
+    }
   }
 
   @override
@@ -195,8 +271,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 padding: const EdgeInsets.all(6.0),
                                 child: Container(
                                   padding: const EdgeInsets.all(6.0),
+                                  decoration: BoxDecoration(
+                                    color: kBackgroundColor,
+                                    borderRadius: BorderRadius.circular(42.0),
+                                  ),
                                   child: CircleAvatar(
                                     backgroundColor: const Color(0xFFE7EEFB),
+                                    radius: 30.0,
                                     child: (photoURL != null)
                                         ? ClipRRect(
                                             borderRadius:
@@ -209,11 +290,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                           )
                                         : const Icon(Icons.person),
-                                    radius: 30.0,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: kBackgroundColor,
-                                    borderRadius: BorderRadius.circular(42.0),
                                   ),
                                 ),
                               ),
