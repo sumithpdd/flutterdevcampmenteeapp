@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +22,11 @@ class MyApp extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return const MaterialApp(
+          return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: 1 == 1 ? LoginScreen() : HomeScreen(),
+            home: (FirebaseAuth.instance.currentUser == null)
+                ? const LoginScreen()
+                : const HomeScreen(),
           );
         } else {
           return MaterialApp(
